@@ -60,6 +60,9 @@ export default new Vuex.Store({
         context.commit('setError', error)
         console.log(err)
       })
+    },
+    setErr(context, value) {
+      context.commit('setError', value)
     }
   },
   modules: {

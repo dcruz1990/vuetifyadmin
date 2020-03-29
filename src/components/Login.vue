@@ -9,9 +9,9 @@
     <v-card-text>
       <v-form v-model="valid">
         <v-container>
-          <v-row v-show="error.errorFlag" >
+          <v-row v-if="error.errorFlag" >
             <v-col >
-              <v-alert type="error" dismissible>{{ error.errorType }}</v-alert>
+              <v-alert @input = "alertClosed" type="error" dismissible>{{ error.errorType }}</v-alert>
             </v-col>
           </v-row>
           <v-row>
@@ -47,13 +47,16 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
+import { mapState, mapMutations } from "vuex";
 
 export default {
   name: "Login",
   data: () => ({
     auth: { email: "", password: "" },
     valid: false,
+    e: {
+        flag: false
+    },
     passwordRules: [v => !!v || "Password is required"],
     emailRules: [
       v => !!v || "E-mail is required",
@@ -61,7 +64,8 @@ export default {
     ]
   }),
   computed: {
-    ...mapState(["isLoading", "error"])
+    ...mapState(["isLoading", "error"]),
+    ...mapMutations(["setError"])
   },
   methods: {
     login() {
@@ -74,6 +78,9 @@ export default {
       } else {
         this.myerror = true;
       }
+    },
+    alertClosed() {
+        this.$store.dispatch("setErr", this.e)
     }
   }
 };
