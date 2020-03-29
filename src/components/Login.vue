@@ -9,18 +9,18 @@
     <v-card-text>
       <v-form v-model="valid">
         <v-container>
-          <v-row v-if="error.errorFlag" >
+          <v-row v-if="error.errorFlag || redirectErr" >
             <v-col >
-              <v-alert @input = "alertClosed" type="error" dismissible>{{ error.errorType }}</v-alert>
+              <v-alert @input = "alertClosed" type="error" dismissible>{{ error.errorFlag ? error.errorType : redirectErr }}</v-alert>
             </v-col>
           </v-row>
-          <v-row>
-            <v-col >
+          <v-row align="center">
+            <v-col offset="2" lg="8" md="6" >
               <v-text-field v-model="auth.email" :rules="emailRules" label="E-mail" required></v-text-field>
             </v-col>
           </v-row>
           <v-row>
-            <v-col >
+            <v-col  offset="2" lg="8" md="6" >
               <v-text-field
                 v-model="auth.password"
                 :rules="passwordRules"
@@ -31,7 +31,7 @@
             </v-col>
           </v-row>
           <v-row>
-            <v-col >
+            <v-col offset="2" lg="8" md="6" >
               <v-btn
                 @click.prevent="login"
                 :loading="isLoading"
@@ -51,11 +51,15 @@ import { mapState, mapMutations } from "vuex";
 
 export default {
   name: "Login",
+  props: {
+    redirectErr: String
+  },
   data: () => ({
     auth: { email: "", password: "" },
     valid: false,
-    e: {
-        flag: false
+    err: {
+        flag: false,
+        type: ""
     },
     passwordRules: [v => !!v || "Password is required"],
     emailRules: [
@@ -80,8 +84,9 @@ export default {
       }
     },
     alertClosed() {
-        this.$store.dispatch("setErr", this.e)
+        this.$store.dispatch("setErr", this.err)
     }
-  }
+  },
+    
 };
 </script>

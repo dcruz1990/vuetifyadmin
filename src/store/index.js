@@ -32,13 +32,14 @@ export default new Vuex.Store({
   },
   actions: {
     Login (context, userdata) {
+      context.commit('setLoadingStatus', true)
       const baseUrl = 'http://localhost:5050/api/'
       const header = { 'Content-Type': 'application/json' }
       fetch(baseUrl + 'Auth/login', { method: 'post', headers: header, body: JSON.stringify(userdata) }).then((response) => {
-        context.commit('setLoadingStatus', true)
         if (response.status === 200) {
           context.commit('setIsAuthenticate', true)
         } else if (response.status === 401) {
+          context.commit('setLoadingStatus', false)
           context.commit('setIsAuthenticate', false)
           const Unauthorized = {
             type: 'Wrong username or password, please verify!',
@@ -58,6 +59,7 @@ export default new Vuex.Store({
           flag: true
         }
         context.commit('setError', error)
+        context.commit('setLoadingStatus', false)
         console.log(err)
       })
     },

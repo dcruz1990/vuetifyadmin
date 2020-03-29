@@ -5,24 +5,41 @@ import Home from '../views/Home.vue'
 import LoginView from '../views/LoginView'
 import EditProfile from '@/components/EditProfile'
 
+import store from '@/store/index';
+
+
 Vue.use(VueRouter)
+
 
 const routes = [
   {
     path: '/',
     name: 'Login',
     component: LoginView
-    
   },
   {
     path: '/home',
     name: 'Home',
-    component: Home
+    component: Home,
   },
   {
     path: '/editprofile',
     name: 'EditProfile',
-    component: EditProfile
+    component: EditProfile,
+    beforeEnter(to, from, next) {
+      if (store.state.isAuthenticated) { 
+        next()
+      } else {
+        next({
+          name: 'Login',
+          query: { redirectFrom: to.fullPath  }
+        })
+      } 
+  //      if (to.name !== 'Login' && !authenticated) next({ name: 'Login' })
+  // // if the user is not authenticated, `next` is called twice
+  //   next()
+    }
+    
   }
 ]
 
