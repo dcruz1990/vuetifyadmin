@@ -1,6 +1,23 @@
 <template>
   <v-container id="user-profile" fluid tag="section">
     <v-row justify="center">
+      <v-snackbar
+      color="success"
+      v-model = "showSnackbar"
+      :timeout="3000"
+      right
+      
+    >
+      Profile updated succefuly!!!
+      <v-btn
+        color="black"
+        text
+        dark
+        @click="showSnackbar = false"
+      >Close
+        
+      </v-btn>
+    </v-snackbar>
       <v-col cols="12" md="8">
         <v-card>
           <v-card-title>Edit Profile {{ mylocaluser.username }} </v-card-title>
@@ -42,7 +59,7 @@
                   </v-col>
 
                   <v-col cols="12" class="text-right">
-                    <v-btn @click="handleUpdateProfile" color="success" class="mr-0">Update Profile</v-btn>
+                    <v-btn @click="handleUpdateProfile" :loading = "isLoading" color="success" class="mr-0">Update Profile</v-btn>
                   </v-col>
                 </v-row>
               </v-container>
@@ -66,23 +83,30 @@
   </v-container>
 </template>
 <script>
+import { mapState } from 'vuex'
 export default {
   name: "EditProfile",
   data () {
     return {
-      mylocaluser: null
+      mylocaluser: null,
+      showSnackbar: false
     }
   },
   beforeMount () {
     this.mylocaluser = JSON.parse ( JSON.stringify ( this.$store.state.user) )
   },
   methods: {
-    handleUpdateProfile() {
-      this.$store.dispatch("updateUser", this.mylocaluser)
+    async handleUpdateProfile() {
+      await this.$store.dispatch("updateUser", this.mylocaluser).then(() => {
+        console.log("success")
+      })
+      
+      this.mylocaluser = JSON.parse ( JSON.stringify ( this.$store.state.user) )
     }
   },
   computed: {
-    
-  }
+    ...mapState(["isLoading"])
+  },
+
 };
 </script>
