@@ -4,16 +4,16 @@
       <v-snackbar
       color="success"
       v-model = "showSnackbar"
-      :timeout="3000"
+      :timeout="2500"
       right
-      
-    >
+          >
       Profile updated succefuly!!!
       <v-btn
         color="black"
         text
         dark
         @click="showSnackbar = false"
+        small
       >Close
         
       </v-btn>
@@ -98,7 +98,7 @@ export default {
   methods: {
     async handleUpdateProfile() {
       await this.$store.dispatch("updateUser", this.mylocaluser).then(() => {
-        console.log("success")
+        this.showSnackbar = true
       })
       
       this.mylocaluser = JSON.parse ( JSON.stringify ( this.$store.state.user) )
