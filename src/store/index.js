@@ -3,12 +3,14 @@ import Vuex from 'vuex'
 
 // import axios from 'axios'
 
+import user from '@/assets/dumydata/data'
+
 Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
     isLoading: false,
-    user: {},
+    user: user,
     isAuthenticated: false,
     error: {
       errorType: '',

@@ -26,20 +26,16 @@ const routes = [
     path: '/editprofile',
     name: 'EditProfile',
     component: EditProfile,
-    beforeEnter(to, from, next) {
-      if (store.state.isAuthenticated) { 
-        next()
-      } else {
-        next({
-          name: 'Login',
-          query: { redirectFrom: to.fullPath  }
-        })
-      } 
-  //      if (to.name !== 'Login' && !authenticated) next({ name: 'Login' })
-  // // if the user is not authenticated, `next` is called twice
-  //   next()
-    }
-    
+    // beforeEnter(to, from, next) {
+    //   if (store.state.isAuthenticated) { 
+    //     next()
+    //   } else {
+    //     next({
+    //       name: 'Login',
+    //       query: { redirectFrom: to.fullPath  }
+    //     })
+    //   } 
+    // }
   }
 ]
 

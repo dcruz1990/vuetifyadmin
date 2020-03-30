@@ -3,14 +3,14 @@
     <v-row justify="center">
       <v-col cols="12" md="8">
         <v-card>
-          <v-card-title>Edit Profile</v-card-title>
+          <v-card-title>Edit Profile {{ user.username }}</v-card-title>
 
           <v-card-text>
-            <v-form  >
+            <v-form >
               <v-container class="py-0">
                 <v-row>
                   <v-col cols="12" md="4">
-                    <v-text-field class="purple-input" label="User Name" value />
+                    <v-text-field :value = "user.username" class="purple-input" label="User Name" />
                   </v-col>
 
                   <v-col cols="12" md="4">
@@ -66,12 +66,23 @@
   </v-container>
 </template>
 <script>
+import { mapState } from 'vuex'
 export default {
   name: "EditProfile",
+  data() {
+    return {
+      test: {
+        username: String
+      }
+    }
+  },
   methods: {
     handleUpdateProfile() {
       console.log("update profile clicked");
     }
+  },
+  computed: {
+   ...mapState(["user"])
   }
   
 };
