@@ -3,14 +3,15 @@ import Vuex from 'vuex'
 
 // import axios from 'axios'
 
-import user from '@/assets/dumydata/data'
+import userdata from '@/assets/dumydata/data'
 
 Vue.use(Vuex)
 
 export default new Vuex.Store({
+  strict: true,
   state: {
     isLoading: false,
-    user: user,
+    user: userdata,
     isAuthenticated: false,
     error: {
       errorType: '',
@@ -67,6 +68,9 @@ export default new Vuex.Store({
     },
     setErr(context, value) {
       context.commit('setError', value)
+    },
+    updateUser(contex, value) {
+      contex.commit('setUserStatus', value)
     }
   },
   modules: {

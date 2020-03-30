@@ -3,34 +3,34 @@
     <v-row justify="center">
       <v-col cols="12" md="8">
         <v-card>
-          <v-card-title>Edit Profile {{ user.username }}</v-card-title>
+          <v-card-title>Edit Profile </v-card-title>
 
           <v-card-text>
-            <v-form >
+            <v-form>
               <v-container class="py-0">
                 <v-row>
                   <v-col cols="12" md="4">
-                    <v-text-field :value = "user.username" class="purple-input" label="User Name" />
+                    <v-text-field :value = "mylocaluser.username" class="purple-input" label="User Name" />
                   </v-col>
 
                   <v-col cols="12" md="4">
-                    <v-text-field label="Email Address" class="purple-input" />
+                    <v-text-field :value = "mylocaluser.email" label="Email Address" class="purple-input" />
                   </v-col>
 
                   <v-col cols="12" md="6">
-                    <v-text-field label="Full Name" class="purple-input" />
+                    <v-text-field :value = "mylocaluser.fullname" label="Full Name" class="purple-input" />
                   </v-col>
 
                   <v-col cols="12">
-                    <v-text-field label="Adress" class="purple-input" />
+                    <v-text-field :value = "mylocaluser.addres" label="Adress" class="purple-input" />
                   </v-col>
 
                   <v-col cols="12" md="4">
-                    <v-text-field label="City" class="purple-input" />
+                    <v-text-field :value = "mylocaluser.city" label="City" class="purple-input" />
                   </v-col>
 
                   <v-col cols="12" md="4">
-                    <v-text-field label="Country" class="purple-input" />
+                    <v-text-field :value = "mylocaluser.country" class="purple-input" />
                   </v-col>
 
                   <v-col cols="12">
@@ -66,24 +66,33 @@
   </v-container>
 </template>
 <script>
-import { mapState } from 'vuex'
+import { mapState } from "vuex";
+
+import { mapFields } from "@/assets/helpers/mapFields"
+
 export default {
   name: "EditProfile",
-  data() {
+  data () {
     return {
-      test: {
-        username: String
-      }
+      mylocaluser: null
     }
+  },
+  beforeMount () {
+    this.mylocaluser = this.user
   },
   methods: {
     handleUpdateProfile() {
-      console.log("update profile clicked");
+      this.$store.dispatch("updateUser", this.mylocaluser)
     }
   },
   computed: {
-   ...mapState(["user"])
+    // userScheme() { return this.$store.state.user }
+    // ...mapFields({
+    // fields: ["username", "email", "country", "phone", "city", "fullname", "addres"],
+    // base: "user",
+    // mutation: "updateUser"
+    // }),
+    ...mapState(["user"])
   }
-  
 };
 </script>
