@@ -4,8 +4,8 @@ import Home from '../views/Home.vue'
 
 import LoginView from '../views/LoginView'
 import EditProfile from '@/components/EditProfile'
+import NotFound from '@/views/NotFound'
 
-import store from '@/store/index';
 
 
 Vue.use(VueRouter)
@@ -36,6 +36,12 @@ const routes = [
     //     })
     //   } 
     // }
+  },
+  {
+    // matches everything else  
+    path: '*',
+    name: 'notFound',
+    component: NotFound
   }
 ]
 

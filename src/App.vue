@@ -25,26 +25,46 @@
         </v-list>
       </v-navigation-drawer>
 
+      <v-snackbar
+      color="info"
+      v-model = "showSnackbar"
+      :timeout="3000"
+      right
+          >
+      We are already there :D
+      <v-btn
+        color="black"
+        text
+        dark
+        @click="showSnackbar = false"
+        small
+      >Close
+        
+      </v-btn>
+    </v-snackbar>
+
       <v-app-bar app color="blue" dark>
         <!-- <v-spacer /> -->
 
         <v-toolbar-title>Coding In DFW Dashboard</v-toolbar-title>
         <v-spacer />
-        <span>{{ user.fullname }}</span>
+        <span v-if="isAuthenticated">{{ user.fullname }}</span>
         
-        <v-menu bottom left>
+        <v-menu bottom left v-if="isAuthenticated" open-on-hover>
           <template v-slot:activator="{ on }">
             <v-avatar size="40" v-on="on">
               <img src="https://cdn.vuetifyjs.com/images/john.jpg" alt="John" />
             </v-avatar>
           </template>
           <v-list>
-            <v-list-item key="editprofile" @click.prevent = "handleEditProfile" >
+            
+            <v-list-item key="editprofile" @click.prevent = "handleEditProfileRouterLink" >
               <v-list-item-title >
                 <v-icon left medium color="blue darken-2">mdi-account</v-icon>
                 <span>Edit Profile</span>
               </v-list-item-title>
             </v-list-item>
+            
             <v-list-item key="addpost" >
               <v-list-item-title >
                 <v-icon left medium color="blue darken-2">mdi-plus-circle</v-icon><span>Create post</span></v-list-item-title>
@@ -85,15 +105,19 @@
 
 <script>
 import { mapState } from "vuex";
+import router from '@/router/index'
 
 export default {
   data: () => ({
     drawer: null,
+    showSnackbar: false
    
   }),
   methods: {
-    handleEditProfile () {
-      console.log("go to edit profile")
+    handleEditProfileRouterLink () {
+      router.push("editprofile").catch(err => {
+        this.showSnackbar = true
+      }) 
     }
   },
   computed: {

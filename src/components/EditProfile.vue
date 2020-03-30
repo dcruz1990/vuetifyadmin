@@ -20,7 +20,7 @@
     </v-snackbar>
       <v-col cols="12" md="8">
         <v-card>
-          <v-card-title>Edit Profile {{ mylocaluser.username }} </v-card-title>
+          <v-card-title>Edit {{ mylocaluser.username }}' profile  </v-card-title>
 
           <v-card-text>
             <v-form>
