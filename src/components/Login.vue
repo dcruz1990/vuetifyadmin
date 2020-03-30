@@ -9,9 +9,9 @@
     <v-card-text>
       <v-form v-model="valid">
         <v-container>
-          <v-row v-if="error.errorFlag || redirectErr" >
+          <v-row v-if="error.errorFlag" >
             <v-col >
-              <v-alert @input = "alertClosed" type="error" dismissible>{{ error.errorFlag ? error.errorType : redirectErr }}</v-alert>
+              <v-alert @input = "alertClosed" type="error" dismissible>{{ error.errorType }}</v-alert>
             </v-col>
           </v-row>
           <v-row align="center">
