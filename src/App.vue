@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <v-app>
-      <v-navigation-drawer v-if = "isAuthenticated" v-model="drawer" app right>
+      <v-navigation-drawer v-if="isAuthenticated" v-model="drawer" app right>
         <v-list dense>
           <v-list-item link>
             <v-list-item-action>
@@ -25,12 +25,28 @@
         </v-list>
       </v-navigation-drawer>
 
-      <v-app-bar app color="blue" dark > 
-        <v-spacer />
+      <v-app-bar app color="blue" dark>
+        <!-- <v-spacer /> -->
 
         <v-toolbar-title>Coding In DFW Dashboard</v-toolbar-title>
-
-        <v-app-bar-nav-icon v-if = "isAuthenticated" @click.stop="drawer = !drawer" />
+        <v-spacer />
+        <v-menu bottom left>
+          <template v-slot:activator="{ on }">
+          <v-avatar size="40" v-on = "on">
+            <img src="https://cdn.vuetifyjs.com/images/john.jpg" alt="John" />
+          </v-avatar>
+          </template>
+          <v-list>
+              <v-list-item
+                v-for="(item, i) in items"
+                :key= "i"
+                @click = "console.log('asdasdasd')"
+              >
+                <v-list-item-title>{{ item.title }}</v-list-item-title>
+              </v-list-item>
+            </v-list>
+        </v-menu>
+        <v-app-bar-nav-icon v-if="isAuthenticated" @click.stop="drawer = !drawer" />
       </v-app-bar>
 
       <v-content>
@@ -56,7 +72,13 @@ import { mapState } from "vuex";
 
 export default {
   data: () => ({
-    drawer: null
+    drawer: null,
+    items: [
+        { title: 'Click Me' },
+        { title: 'Click Me' },
+        { title: 'Click Me' },
+        { title: 'Click Me 2' },
+      ],
   }),
   computed: {
     ...mapState(["isAuthenticated"])
