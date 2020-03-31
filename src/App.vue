@@ -46,14 +46,14 @@
       <v-app-bar app color="blue" dark>
         <!-- <v-spacer /> -->
 
-        <v-toolbar-title>Coding In DFW Dashboard</v-toolbar-title>
+        <v-toolbar-title ><span @click.prevent = "goHome">Coding In DFW Dashboard</span></v-toolbar-title>
         <v-spacer />
         <span v-if="isAuthenticated">{{ user.fullname }}</span>
         
         <v-menu bottom left v-if="isAuthenticated" open-on-hover>
           <template v-slot:activator="{ on }">
             <v-avatar size="40" v-on="on">
-              <img src="https://cdn.vuetifyjs.com/images/john.jpg" alt="John" />
+              <img class="pointer" src="https://cdn.vuetifyjs.com/images/john.jpg" alt="John" />
             </v-avatar>
           </template>
           <v-list>
@@ -118,6 +118,11 @@ export default {
       router.push("editprofile").catch(err => {
         this.showSnackbar = true
       }) 
+    },
+    goHome() {
+      router.push('/').catch(err => {
+        this.showSnackbar = true  
+      }) 
     }
   },
   computed: {
@@ -133,6 +138,10 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
+}
+
+.pointer {
+  cursor: pointer;
 }
 
 #nav {
