@@ -15,7 +15,8 @@
                 <v-row>
                   <v-col cols="12" md="4">
                     <v-text-field
-                    @keydown = "handleUpdateProfile"
+                    v-debounce:300ms="handleUpdateProfile"
+                   
                       v-model="mylocaluser.username"
                       class="purple-input"
                       label="User Name"
@@ -24,7 +25,7 @@
 
                   <v-col cols="12" md="4">
                     <v-text-field
-                     @keydown = "handleUpdateProfile"
+                     v-debounce:300ms="handleUpdateProfile"
                       v-model="mylocaluser.email"
                       label="Email Address"
                       class="purple-input"
@@ -34,7 +35,7 @@
                   <v-col cols="12" md="6">
 
                     <v-text-field
-                     @keydown = "handleUpdateProfile"
+                     v-debounce:300ms="handleUpdateProfile"
                       v-model="mylocaluser.fullname"
                       label="Full Name"
                       class="purple-input"
@@ -42,16 +43,16 @@
                   </v-col>
 
                   <v-col cols="12">
-                    <v-text-field  @keydown = "handleUpdateProfile" v-model="mylocaluser.addres" label="Adress" class="purple-input" />
+                    <v-text-field  v-debounce:300ms="handleUpdateProfile" v-model="mylocaluser.addres" label="Adress" class="purple-input" />
                   </v-col>
 
                   <v-col cols="12" md="4">
-                    <v-text-field  @keydown = "handleUpdateProfile" v-model="mylocaluser.city" label="City" class="purple-input" />
+                    <v-text-field  v-debounce:300ms="handleUpdateProfile" v-model="mylocaluser.city" label="City" class="purple-input" />
                   </v-col>
 
                   <v-col cols="12" md="4">
                     <v-text-field
-                     @keydown = "handleUpdateProfile"
+                     v-debounce:300ms="handleUpdateProfile"
                       v-model="mylocaluser.country"
                       class="purple-input"
                       label="Country"
@@ -60,7 +61,7 @@
 
                   <v-col cols="12">
                     <v-textarea
-                     @keydown = "handleUpdateProfile"
+                     v-debounce:300ms="handleUpdateProfile"
                       class="purple-input"
                       label="About Me"
                       v-model="mylocaluser.aboutme"
@@ -69,7 +70,7 @@
 
                   <v-col cols="12" class="text-right">
                     <v-btn
-                      @click="handleUpdateProfile"
+                     v-debounce:300ms="handleUpdateProfile"
                       :loading="isLoading"
                       color="success"
                       class="mr-0"
