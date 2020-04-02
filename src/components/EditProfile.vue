@@ -9,14 +9,15 @@
         <v-card>
           <v-card-title>Edit {{ mylocaluser.username }}' profile:</v-card-title>
 
+          <v-progress-circular v-if="isTyping" indeterminate color="primary"></v-progress-circular>
           <v-card-text>
             <v-form>
               <v-container class="py-0">
                 <v-row>
                   <v-col cols="12" md="4">
                     <v-text-field
-                    v-debounce:300ms="handleUpdateProfile"
-                   
+                      @keydown = "isTyping = true"
+                      v-debounce:400ms="handleUpdateProfile"
                       v-model="mylocaluser.username"
                       class="purple-input"
                       label="User Name"
@@ -25,7 +26,8 @@
 
                   <v-col cols="12" md="4">
                     <v-text-field
-                     v-debounce:300ms="handleUpdateProfile"
+                       @keydown = "isTyping = true"
+                      v-debounce:300ms="handleUpdateProfile"
                       v-model="mylocaluser.email"
                       label="Email Address"
                       class="purple-input"
@@ -33,9 +35,9 @@
                   </v-col>
 
                   <v-col cols="12" md="6">
-
                     <v-text-field
-                     v-debounce:300ms="handleUpdateProfile"
+                     @keydown = "isTyping = true"
+                      v-debounce:300ms="handleUpdateProfile"
                       v-model="mylocaluser.fullname"
                       label="Full Name"
                       class="purple-input"
@@ -43,16 +45,29 @@
                   </v-col>
 
                   <v-col cols="12">
-                    <v-text-field  v-debounce:300ms="handleUpdateProfile" v-model="mylocaluser.addres" label="Adress" class="purple-input" />
-                  </v-col>
-
-                  <v-col cols="12" md="4">
-                    <v-text-field  v-debounce:300ms="handleUpdateProfile" v-model="mylocaluser.city" label="City" class="purple-input" />
+                    <v-text-field
+                     @keydown = "isTyping = true"
+                      v-debounce:300ms="handleUpdateProfile"
+                      v-model="mylocaluser.addres"
+                      label="Adress"
+                      class="purple-input"
+                    />
                   </v-col>
 
                   <v-col cols="12" md="4">
                     <v-text-field
-                     v-debounce:300ms="handleUpdateProfile"
+                     @keydown = "isTyping = true"
+                      v-debounce:300ms="handleUpdateProfile"
+                      v-model="mylocaluser.city"
+                      label="City"
+                      class="purple-input"
+                    />
+                  </v-col>
+
+                  <v-col cols="12" md="4">
+                    <v-text-field
+                     @keydown = "isTyping = true"
+                      v-debounce:300ms="handleUpdateProfile"
                       v-model="mylocaluser.country"
                       class="purple-input"
                       label="Country"
@@ -61,21 +76,22 @@
 
                   <v-col cols="12">
                     <v-textarea
-                     v-debounce:300ms="handleUpdateProfile"
+                     @keydown = "isTyping = true"
+                      v-debounce:300ms="handleUpdateProfile"
                       class="purple-input"
                       label="About Me"
                       v-model="mylocaluser.aboutme"
                     />
                   </v-col>
 
-                  <v-col cols="12" class="text-right">
+                  <!-- <v-col cols="12" class="text-right">
                     <v-btn
                      v-debounce:300ms="handleUpdateProfile"
                       :loading="isLoading"
                       color="success"
                       class="mr-0"
                     >Update Profile</v-btn>
-                  </v-col>
+                  </v-col>-->
                 </v-row>
               </v-container>
             </v-form>
@@ -108,15 +124,16 @@ export default {
       mylocaluser: {},
       showSnackbar: false,
       changed: false,
-      changedFields: []
+      changedFields: [],
+      isTyping: false
     };
   },
   beforeMount() {
     this.mylocaluser = JSON.parse(JSON.stringify(this.$store.state.user));
   },
   beforeRouteLeave(to, from, next) {
-    this.$store.dispatch("updateUser", this.mylocaluser)
-    next()
+    // this.$store.dispatch("updateUser", this.mylocaluser)
+    next();
     // if (this.changed) {
     //   const answer = window.confirm(
     //     "Do you really want to leave? you have unsaved changes!, you have this fields changed:" +
@@ -134,9 +151,10 @@ export default {
   methods: {
     async handleUpdateProfile() {
       await this.$store.dispatch("updateUser", this.mylocaluser).then(() => {
-        this.showSnackbar = true;
+        this.showSnackbar = true
+        this.isTyping = false
       });
-
+      
       this.mylocaluser = JSON.parse(JSON.stringify(this.$store.state.user));
     }
     // changedFullname(value) {
