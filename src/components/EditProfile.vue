@@ -15,7 +15,7 @@
                 <v-row>
                   <v-col cols="12" md="4">
                     <v-text-field
-                      @change="changedFlag"
+                    @keydown = "handleUpdateProfile"
                       v-model="mylocaluser.username"
                       class="purple-input"
                       label="User Name"
@@ -24,6 +24,7 @@
 
                   <v-col cols="12" md="4">
                     <v-text-field
+                     @keydown = "handleUpdateProfile"
                       v-model="mylocaluser.email"
                       label="Email Address"
                       class="purple-input"
@@ -31,7 +32,9 @@
                   </v-col>
 
                   <v-col cols="12" md="6">
+
                     <v-text-field
+                     @keydown = "handleUpdateProfile"
                       v-model="mylocaluser.fullname"
                       label="Full Name"
                       class="purple-input"
@@ -39,15 +42,16 @@
                   </v-col>
 
                   <v-col cols="12">
-                    <v-text-field v-model="mylocaluser.addres" label="Adress" class="purple-input" />
+                    <v-text-field  @keydown = "handleUpdateProfile" v-model="mylocaluser.addres" label="Adress" class="purple-input" />
                   </v-col>
 
                   <v-col cols="12" md="4">
-                    <v-text-field v-model="mylocaluser.city" label="City" class="purple-input" />
+                    <v-text-field  @keydown = "handleUpdateProfile" v-model="mylocaluser.city" label="City" class="purple-input" />
                   </v-col>
 
                   <v-col cols="12" md="4">
                     <v-text-field
+                     @keydown = "handleUpdateProfile"
                       v-model="mylocaluser.country"
                       class="purple-input"
                       label="Country"
@@ -56,6 +60,7 @@
 
                   <v-col cols="12">
                     <v-textarea
+                     @keydown = "handleUpdateProfile"
                       class="purple-input"
                       label="About Me"
                       v-model="mylocaluser.aboutme"
@@ -101,21 +106,29 @@ export default {
     return {
       mylocaluser: {},
       showSnackbar: false,
-      changed: false
+      changed: false,
+      changedFields: []
     };
   },
   beforeMount() {
     this.mylocaluser = JSON.parse(JSON.stringify(this.$store.state.user));
   },
   beforeRouteLeave(to, from, next) {
-    const answer = window.confirm(
-      "Do you really want to leave? you have unsaved changes!"
-    );
-    if (answer) {
-      next();
-    } else {
-      next(false);
-    }
+    this.$store.dispatch("updateUser", this.mylocaluser)
+    next()
+    // if (this.changed) {
+    //   const answer = window.confirm(
+    //     "Do you really want to leave? you have unsaved changes!, you have this fields changed:" +
+    //       this.changedFields
+    //   );
+    //   if (answer) {
+    //     next();
+    //   } else {
+    //     next(false);
+    //   }
+    // } else {
+    //   next();
+    // }
   },
   methods: {
     async handleUpdateProfile() {
@@ -124,44 +137,42 @@ export default {
       });
 
       this.mylocaluser = JSON.parse(JSON.stringify(this.$store.state.user));
-    },
-    changedFlag() {
-      this.changed = true;
     }
+    // changedFullname(value) {
+    //   if (value !== this.user.fullname) {
+    //     this.changed = true;
+    //     this.changedFields.push("fullname");
+    //   } else {
+    //     this.changed = false;
+    //     var op = this.changedFields.findIndex(function(element) {
+    //       return element === value;
+    //     });
+    //     this.changedFields.splice(op, 1);
+    //   }
+    // }
   },
   computed: {
     ...mapState(["isLoading", "user"])
-  },
-  watch: {
-    mylocaluser: {
-      deep: true,
-      handler: function(nuevoValor, valorAnterior) {
-        console.log(
-          "El valor anterior era ",
-          valorAnterior,
-          " y ahora es",
-          nuevoValor
-        );
-        if (nuevoValor !== this.user) {
-          console.log("Los datos cambiaron!!! son diferentes");
-        } else {
-          console.log("Los datos son iguales!");
-        }
-      }
-    }
   }
-  // watch: {
-  //   mylocaluser: {
-  //     handler: function(val, oldVal) {
-  //       if (this.mylocaluser !== this.user) {
-  //         console.log("datos diferentes");
-  //         this.changedFlag = true;
-  //       } else {
-  //         this.changedFlag = false;
-  //       }
-  //     },
-  //     deep: true
-  //   }
+  // // watch: {
+  // //   mylocaluser: {
+  // //     deep: true,
+  // //     handler: function(nuevoValor, valorAnterior) {
+  // //        console.log(
+  // //         "El valor anterior era ",
+  // //         valorAnterior,
+  // //         " y ahora es",
+  // //         nuevoValor
+  // //       );
+  // //       if (nuevoValor !== this.user) {
+  // //         console.log("Los datos cambiaron!!! son diferentes");
+  // //         this.changed = true
+  // //       } else {
+  // //         console.log("Los datos son iguales!");
+  // //         this.changed = false
+  // //       }
+  // //     }
+  // //   }
   // }
 };
 </script>
