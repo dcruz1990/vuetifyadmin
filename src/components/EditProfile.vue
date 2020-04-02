@@ -5,7 +5,16 @@
         Profile updated succefuly!!!
         <v-btn color="black" text dark @click="showSnackbar = false" small>Close</v-btn>
       </v-snackbar>
+
       <v-col cols="12" md="8">
+        <v-alert
+          transition="scale-transition"
+          dismissible
+          border="top"
+          colored-border
+          type="info"
+          elevation="2"
+        >To update profile you just have to type on the fields, the update occur when you stop typing.</v-alert>
         <v-card>
           <v-card-title>Edit {{ mylocaluser.username }}' profile:</v-card-title>
 
@@ -16,7 +25,7 @@
                 <v-row>
                   <v-col cols="12" md="4">
                     <v-text-field
-                      @keydown = "isTyping = true"
+                      @keydown="isTyping = true"
                       v-debounce:400ms="handleUpdateProfile"
                       v-model="mylocaluser.username"
                       class="purple-input"
@@ -26,7 +35,7 @@
 
                   <v-col cols="12" md="4">
                     <v-text-field
-                       @keydown = "isTyping = true"
+                      @keydown="isTyping = true"
                       v-debounce:300ms="handleUpdateProfile"
                       v-model="mylocaluser.email"
                       label="Email Address"
@@ -36,7 +45,7 @@
 
                   <v-col cols="12" md="6">
                     <v-text-field
-                     @keydown = "isTyping = true"
+                      @keydown="isTyping = true"
                       v-debounce:300ms="handleUpdateProfile"
                       v-model="mylocaluser.fullname"
                       label="Full Name"
@@ -46,7 +55,7 @@
 
                   <v-col cols="12">
                     <v-text-field
-                     @keydown = "isTyping = true"
+                      @keydown="isTyping = true"
                       v-debounce:300ms="handleUpdateProfile"
                       v-model="mylocaluser.addres"
                       label="Adress"
@@ -56,7 +65,7 @@
 
                   <v-col cols="12" md="4">
                     <v-text-field
-                     @keydown = "isTyping = true"
+                      @keydown="isTyping = true"
                       v-debounce:300ms="handleUpdateProfile"
                       v-model="mylocaluser.city"
                       label="City"
@@ -66,7 +75,7 @@
 
                   <v-col cols="12" md="4">
                     <v-text-field
-                     @keydown = "isTyping = true"
+                      @keydown="isTyping = true"
                       v-debounce:300ms="handleUpdateProfile"
                       v-model="mylocaluser.country"
                       class="purple-input"
@@ -76,7 +85,7 @@
 
                   <v-col cols="12">
                     <v-textarea
-                     @keydown = "isTyping = true"
+                      @keydown="isTyping = true"
                       v-debounce:300ms="handleUpdateProfile"
                       class="purple-input"
                       label="About Me"
@@ -151,10 +160,10 @@ export default {
   methods: {
     async handleUpdateProfile() {
       await this.$store.dispatch("updateUser", this.mylocaluser).then(() => {
-        this.showSnackbar = true
-        this.isTyping = false
+        this.showSnackbar = true;
+        this.isTyping = false;
       });
-      
+
       this.mylocaluser = JSON.parse(JSON.stringify(this.$store.state.user));
     }
     // changedFullname(value) {
