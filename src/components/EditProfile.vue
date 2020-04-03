@@ -110,12 +110,50 @@
 
       <v-col cols="12" md="4">
         <v-card-text class="text-center">
-          <v-avatar @click = "test" color="orange" size="150">
-            <v-img src="https://cdn.vuetifyjs.com/images/john.jpg" aspect-ratio="1.7"></v-img>
+          <v-avatar @click="test" color="orange" size="150">
+            <v-img src="mylocaluser.photos[0].url" aspect-ratio="1.7"></v-img>
           </v-avatar>
-           
-                    
-           
+          <v-col>
+            <v-dialog v-model="ChangeProfilePicDialog" persistent max-width="290">
+              <template v-slot:activator="{ on }">
+                <v-btn color="success" dark v-on="on">Select Profile Pic</v-btn>
+              </template>
+              <v-card>
+                <v-card-title class="headline">Select profile pic:</v-card-title>
+                <v-card-text>
+                  Select a photo or upload a new one:
+                  <v-row>
+                    <v-col v-for="n in 9" :key="n" class="d-flex child-flex" cols="4">
+                      <v-card flat tile class="d-flex">
+                        <v-img
+                          :src="mylocaluser.photos[0].url"
+                          :lazy-src="`https://picsum.photos/10/6?image=${n * 5 + 10}`"
+                          aspect-ratio="1"
+                          class="grey lighten-2"
+                        >
+                          <template v-slot:placeholder>
+                            <v-row class="fill-height ma-0" align="center" justify="center">
+                              <v-progress-circular indeterminate color="grey lighten-5"></v-progress-circular>
+                            </v-row>
+                          </template>
+                        </v-img>
+                      </v-card>
+                    </v-col>
+                  </v-row>
+                </v-card-text>
+                <v-card-actions>
+                  <v-spacer></v-spacer>
+                  <v-btn color="green darken-1" text @click="ChangeProfilePicDialog = false">Cancel</v-btn>
+                  <v-btn
+                    color="green darken-1"
+                    text
+                    @click="ChangeProfilePicDialog = false"
+                  >Update pic</v-btn>
+                </v-card-actions>
+              </v-card>
+            </v-dialog>
+          </v-col>
+
           <h6 class="display-1 mb-1 grey--text">FULL STACK DEVELOPER</h6>
 
           <h4 class="display-2 font-weight-light mb-3 black--text">{{ mylocaluser.fullname}}</h4>
@@ -127,7 +165,7 @@
   </v-container>
 </template>
 <script>
-import { mapState } from "vuex";
+import { mapState, mapGetters } from "vuex";
 export default {
   name: "EditProfile",
   data() {
@@ -136,7 +174,8 @@ export default {
       showSnackbar: false,
       changed: false,
       changedFields: [],
-      isTyping: false
+      isTyping: false,
+      ChangeProfilePicDialog: false
     };
   },
   beforeMount() {
@@ -168,13 +207,13 @@ export default {
 
       this.mylocaluser = JSON.parse(JSON.stringify(this.$store.state.user));
     },
-    test () {
-      console.log("hovered")
+    test() {
+      console.log("hovered");
     }
-
   },
   computed: {
-    ...mapState(["isLoading", "user"])
+    ...mapState(["isLoading", "user"]),
+    ...mapGetters(["UserMainPhoto"])
   }
   // // watch: {
   // //   mylocaluser: {

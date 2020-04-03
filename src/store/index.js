@@ -4,6 +4,7 @@ import Vuex from 'vuex'
 // import axios from 'axios'
 
 import userdata from '@/assets/dumydata/data'
+import datauser from '@/assets/dumydata/data.json'
 
 Vue.use(Vuex)
 
@@ -11,7 +12,7 @@ export default new Vuex.Store({
   strict: true,
   state: {
     isLoading: false,
-    user: userdata,
+    user: datauser,
     isAuthenticated: false,
     error: {
       errorType: '',
@@ -82,6 +83,11 @@ export default new Vuex.Store({
   getters: {
     getIsAuthenticated (state) {
       return state.isAuthenticated
+    },
+    UserMainPhoto () {
+      return state.user.photos.map(photo => photo.main = true) 
     }
+  
   }
+  
 })
