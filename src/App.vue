@@ -53,7 +53,7 @@
         <v-menu bottom left v-if="isAuthenticated" open-on-hover>
           <template v-slot:activator="{ on }">
             <v-avatar size="40" v-on="on">
-              <img class="pointer" src="UserMainPhoto[0].url" alt="John" />
+              <img class="pointer" src="@/assets/logo.png"  alt="User Photo" />
             </v-avatar>
           </template>
           <v-list>

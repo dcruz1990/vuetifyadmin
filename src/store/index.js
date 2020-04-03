@@ -3,8 +3,8 @@ import Vuex from 'vuex'
 
 // import axios from 'axios'
 
-import userdata from '@/assets/dumydata/data'
-import datauser from '@/assets/dumydata/data.json'
+// import userdata from '@/assets/dumydata/data'
+// import datauser from '@/assets/dumydata/data.json'
 
 Vue.use(Vuex)
 
@@ -66,6 +66,7 @@ export default new Vuex.Store({
       }).then((data) => {
         context.commit('setUserStatus', data.user)
         context.commit('setToken', data.token)
+        localStorage.setItem('token', data.token)
         context.commit('setLoadingStatus', false)
         console.log(this.data)
       }).catch((err) => {
@@ -101,6 +102,9 @@ export default new Vuex.Store({
       } catch (error) {
         console.log(error)
       }
+    },
+    async getUser (context) {
+      await axios.create()
     }
     // setMainProfilePic(context, index) {
     //   context.commit('setUserProfile', index)
