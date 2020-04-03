@@ -92,15 +92,6 @@
                       v-model="mylocaluser.aboutme"
                     />
                   </v-col>
-
-                  <!-- <v-col cols="12" class="text-right">
-                    <v-btn
-                     v-debounce:300ms="handleUpdateProfile"
-                      :loading="isLoading"
-                      color="success"
-                      class="mr-0"
-                    >Update Profile</v-btn>
-                  </v-col>-->
                 </v-row>
               </v-container>
             </v-form>
@@ -111,7 +102,8 @@
       <v-col cols="12" md="4">
         <v-card-text class="text-center">
           <v-avatar @click="test" color="orange" size="150">
-            <v-img src="mylocaluser.photos[0].url" aspect-ratio="1.7"></v-img>
+            <v-img :src="UserMainPhoto[0].url" 
+            aspect-ratio="1.7"></v-img>
           </v-avatar>
           <v-col>
             <v-dialog v-model="ChangeProfilePicDialog" persistent max-width="290">
@@ -123,10 +115,10 @@
                 <v-card-text>
                   Select a photo or upload a new one:
                   <v-row>
-                    <v-col v-for="n in 9" :key="n" class="d-flex child-flex" cols="4">
+                    <v-col v-for="photo in getAlluserPhotos" :key="photo.id" class="d-flex child-flex" cols="4">
                       <v-card flat tile class="d-flex">
                         <v-img
-                          :src="mylocaluser.photos[0].url"
+                          :src="photo.url"
                           :lazy-src="`https://picsum.photos/10/6?image=${n * 5 + 10}`"
                           aspect-ratio="1"
                           class="grey lighten-2"
@@ -208,32 +200,14 @@ export default {
       this.mylocaluser = JSON.parse(JSON.stringify(this.$store.state.user));
     },
     test() {
-      console.log("hovered");
+      console.log(this.getAlluserPhotos)
+      
     }
   },
   computed: {
     ...mapState(["isLoading", "user"]),
-    ...mapGetters(["UserMainPhoto"])
+    ...mapGetters(["UserMainPhoto", "getAlluserPhotos"])
   }
-  // // watch: {
-  // //   mylocaluser: {
-  // //     deep: true,
-  // //     handler: function(nuevoValor, valorAnterior) {
-  // //        console.log(
-  // //         "El valor anterior era ",
-  // //         valorAnterior,
-  // //         " y ahora es",
-  // //         nuevoValor
-  // //       );
-  // //       if (nuevoValor !== this.user) {
-  // //         console.log("Los datos cambiaron!!! son diferentes");
-  // //         this.changed = true
-  // //       } else {
-  // //         console.log("Los datos son iguales!");
-  // //         this.changed = false
-  // //       }
-  // //     }
-  // //   }
-  // }
+  
 };
 </script>

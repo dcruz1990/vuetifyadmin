@@ -84,9 +84,13 @@ export default new Vuex.Store({
     getIsAuthenticated (state) {
       return state.isAuthenticated
     },
-    UserMainPhoto () {
-      return state.user.photos.map(photo => photo.main = true) 
+    UserMainPhoto (state) {
+      return state.user.photos.filter(({main}) => Boolean(main))
+    },
+    getAlluserPhotos (state) {
+      return state.user.photos
     }
+    
   
   }
   

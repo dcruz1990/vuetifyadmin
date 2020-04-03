@@ -10,6 +10,11 @@
             "id": "1",
             "main": true,
             "url": "https://picsum.photos/seed/picsum/200/300"
+        },
+        {
+            "id": "2",
+            "main": false,
+            "url": "https://picsum.photos/seed/picsum/400/900"
         }
     ],
     "posts":[],
