@@ -70,15 +70,10 @@ export default new Vuex.Store({
       context.commit('setError', value)
     },
     async updateUser(contex, value) {
-      contex.commit('setLoadingStatus', true)
-      console.log("loading true")
       try {
         let res = await contex.commit('setUserStatus', value)
       } catch (err) {
         return err
-      } finally {
-        contex.commit('setLoadingStatus', false)
-        console.log("loading False")
       }
     }
   },

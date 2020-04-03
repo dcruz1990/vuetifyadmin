@@ -110,10 +110,12 @@
 
       <v-col cols="12" md="4">
         <v-card-text class="text-center">
-          <v-avatar color="orange" size="150">
+          <v-avatar @click = "test" color="orange" size="150">
             <v-img src="https://cdn.vuetifyjs.com/images/john.jpg" aspect-ratio="1.7"></v-img>
           </v-avatar>
-
+           
+                    
+           
           <h6 class="display-1 mb-1 grey--text">FULL STACK DEVELOPER</h6>
 
           <h4 class="display-2 font-weight-light mb-3 black--text">{{ mylocaluser.fullname}}</h4>
@@ -165,19 +167,11 @@ export default {
       });
 
       this.mylocaluser = JSON.parse(JSON.stringify(this.$store.state.user));
+    },
+    test () {
+      console.log("hovered")
     }
-    // changedFullname(value) {
-    //   if (value !== this.user.fullname) {
-    //     this.changed = true;
-    //     this.changedFields.push("fullname");
-    //   } else {
-    //     this.changed = false;
-    //     var op = this.changedFields.findIndex(function(element) {
-    //       return element === value;
-    //     });
-    //     this.changedFields.splice(op, 1);
-    //   }
-    // }
+
   },
   computed: {
     ...mapState(["isLoading", "user"])
