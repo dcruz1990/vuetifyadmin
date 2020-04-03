@@ -47,23 +47,33 @@
                     <v-text-field
                       @keydown="isTyping = true"
                       v-debounce:300ms="handleUpdateProfile"
-                      v-model="mylocaluser.fullname"
+                      v-model="mylocaluser.fullName"
                       label="Full Name"
                       class="purple-input"
                     />
                   </v-col>
 
-                  <v-col cols="12">
+                  <v-col cols="12" md="4">
                     <v-text-field
                       @keydown="isTyping = true"
                       v-debounce:300ms="handleUpdateProfile"
-                      v-model="mylocaluser.addres"
-                      label="Adress"
+                      v-model="mylocaluser.phone"
                       class="purple-input"
+                      label="Phone number"
                     />
                   </v-col>
 
-                  <v-col cols="12" md="4">
+                  <!-- <v-col cols="12">
+                    <v-text-field
+                      @keydown="isTyping = true"
+                      v-debounce:300ms="handleUpdateProfile"
+                      v-model="mylocaluser.user.addres"
+                      label="Adress"
+                      class="purple-input"
+                    />
+                  </v-col> -->
+
+                  <!-- <v-col cols="12" md="4">
                     <v-text-field
                       @keydown="isTyping = true"
                       v-debounce:300ms="handleUpdateProfile"
@@ -71,9 +81,9 @@
                       label="City"
                       class="purple-input"
                     />
-                  </v-col>
+                  </v-col> -->
 
-                  <v-col cols="12" md="4">
+                  <!-- <v-col cols="12" md="4">
                     <v-text-field
                       @keydown="isTyping = true"
                       v-debounce:300ms="handleUpdateProfile"
@@ -81,9 +91,9 @@
                       class="purple-input"
                       label="Country"
                     />
-                  </v-col>
+                  </v-col> -->
 
-                  <v-col cols="12">
+                  <!-- <v-col cols="12">
                     <v-textarea
                       @keydown="isTyping = true"
                       v-debounce:300ms="handleUpdateProfile"
@@ -91,7 +101,7 @@
                       label="About Me"
                       v-model="mylocaluser.aboutme"
                     />
-                  </v-col>
+                  </v-col> -->
                 </v-row>
               </v-container>
             </v-form>
@@ -102,7 +112,8 @@
       <v-col cols="12" md="4">
         <v-card-text class="text-center">
           <v-avatar color="orange" size="150">
-            <v-img :src="UserMainPhoto[0].url" aspect-ratio="1.7"></v-img>
+            <v-img lazy-src="@/assets/logo.png"  aspect-ratio="1.7"></v-img>
+            <!-- :src="UserMainPhoto[0].url" -->
           </v-avatar>
           <v-col>
             <v-dialog v-model="ChangeProfilePicDialog" persistent max-width="290">
@@ -114,21 +125,25 @@
                 <v-card-text>
                   Select a photo or upload a new one:
                   <v-row>
+                     <!-- v-for="(photo, index) in getAlluserPhotos" -->
+                     <!-- :key="photo.id" -->
                     <v-col
-                      v-for="(photo, index) in getAlluserPhotos"
-                      :key="photo.id"
+                     
+                      
                       class="d-flex child-flex"
                       cols="4"
                     >
                       <v-card flat tile class="d-flex">
+                        <!-- :src="photo.url" -->
+                        <!-- @click="setMainProfilePic(index)" -->
                         <v-img
-                          @click="setMainProfilePic(index)"
-                          :src="photo.url"
+                          
+                          
                           lazy-src="https://picsum.photos/10/6"
                           aspect-ratio="1"
                           class="grey lighten-2"
                         >
-                          <p v-if="photo.main">In use</p>
+                          <!-- <p v-if="photo.main">In use</p> -->
                           <template v-slot:placeholder>
                             <v-row class="fill-height ma-0" align="center" justify="center">
                               <v-progress-circular indeterminate color="grey lighten-5"></v-progress-circular>
@@ -159,9 +174,9 @@
 
           <h6 class="display-1 mb-1 grey--text">FULL STACK DEVELOPER</h6>
 
-          <h4 class="display-2 font-weight-light mb-3 black--text">{{ mylocaluser.fullname}}</h4>
+          <h4 class="display-2 font-weight-light mb-3 black--text">{{ mylocaluser.fullName}}</h4>
 
-          <p class="font-weight-light grey--text">{{mylocaluser.aboutme }}</p>
+          <!-- <p class="font-weight-light grey--text">{{mylocaluser.aboutme }}</p> -->
         </v-card-text>
       </v-col>
     </v-row>
@@ -176,7 +191,6 @@ export default {
       mylocaluser: {},
       showSnackbar: false,
       changed: false,
-      changedFields: [],
       isTyping: false,
       ChangeProfilePicDialog: false
     };
@@ -202,7 +216,7 @@ export default {
     // }
   },
   methods: {
-    ...mapActions(["setMainProfilePic"]),
+    // ...mapActions(["setMainProfilePic"]),
     async handleUpdateProfile() {
       await this.$store.dispatch("updateUser", this.mylocaluser).then(() => {
         this.showSnackbar = true;
@@ -212,15 +226,15 @@ export default {
       this.mylocaluser = JSON.parse(JSON.stringify(this.$store.state.user));
     },
     test() {
-      console.log(this.getAlluserPhotos[1]);
+      // console.log(this.getAlluserPhotos[1]);
     },
-    changeUserProfile() {
-      this.$store.dispatch;
-    }
+    // changeUserProfile() {
+    //   this.$store.dispatch;
+    // }
   },
   computed: {
     ...mapState(["isLoading", "user"]),
-    ...mapGetters(["UserMainPhoto", "getAlluserPhotos"])
+    // ...mapGetters(["UserMainPhoto", "getAlluserPhotos"])
   }
 };
 </script>

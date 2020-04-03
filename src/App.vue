@@ -53,7 +53,7 @@
         <v-menu bottom left v-if="isAuthenticated" open-on-hover>
           <template v-slot:activator="{ on }">
             <v-avatar size="40" v-on="on">
-              <img class="pointer" src="https://cdn.vuetifyjs.com/images/john.jpg" alt="John" />
+              <img class="pointer" src="UserMainPhoto[0].url" alt="John" />
             </v-avatar>
           </template>
           <v-list>
@@ -104,7 +104,7 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
+import { mapState, mapGetters } from "vuex";
 import router from '@/router/index'
 
 export default {
@@ -126,7 +126,8 @@ export default {
     }
   },
   computed: {
-    ...mapState(["isAuthenticated", "user"])
+    ...mapState(["isAuthenticated", "user"]),
+    ...mapGetters(["UserMainPhoto"])
   }
 };
 </script>
