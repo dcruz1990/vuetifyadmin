@@ -101,9 +101,8 @@
 
       <v-col cols="12" md="4">
         <v-card-text class="text-center">
-          <v-avatar @click="test" color="orange" size="150">
-            <v-img :src="UserMainPhoto[0].url" 
-            aspect-ratio="1.7"></v-img>
+          <v-avatar color="orange" size="150">
+            <v-img :src="UserMainPhoto[0].url" aspect-ratio="1.7"></v-img>
           </v-avatar>
           <v-col>
             <v-dialog v-model="ChangeProfilePicDialog" persistent max-width="290">
@@ -115,15 +114,21 @@
                 <v-card-text>
                   Select a photo or upload a new one:
                   <v-row>
-                    <v-col v-for="(photo, index) in getAlluserPhotos" :key="photo.id" class="d-flex child-flex" cols="4">
+                    <v-col
+                      v-for="(photo, index) in getAlluserPhotos"
+                      :key="photo.id"
+                      class="d-flex child-flex"
+                      cols="4"
+                    >
                       <v-card flat tile class="d-flex">
                         <v-img
-                          @click = "setMainProfilePic(index)"
+                          @click="setMainProfilePic(index)"
                           :src="photo.url"
-                          lazy-src = "https://picsum.photos/10/6"
+                          lazy-src="https://picsum.photos/10/6"
                           aspect-ratio="1"
                           class="grey lighten-2"
-                        ><p v-if = "photo.main">In use</p>
+                        >
+                          <p v-if="photo.main">In use</p>
                           <template v-slot:placeholder>
                             <v-row class="fill-height ma-0" align="center" justify="center">
                               <v-progress-circular indeterminate color="grey lighten-5"></v-progress-circular>
@@ -132,15 +137,21 @@
                         </v-img>
                       </v-card>
                     </v-col>
+                    <v-col>
+                      <v-file-input
+                        accept="image/png, image/jpeg, image/bmp"
+                        placeholder="Pick an avatar"
+                        prepend-icon="mdi-camera"
+                        label="Avatar"
+                      ></v-file-input>
+
+                      <v-btn color="green darken-1" text>Upload New</v-btn>
+                    </v-col>
                   </v-row>
                 </v-card-text>
                 <v-card-actions>
                   <v-spacer></v-spacer>
-                  <v-btn
-                    color="green darken-1"
-                    text
-                    @click="ChangeProfilePicDialog = false"
-                  >Done</v-btn>
+                  <v-btn color="green darken-1" text @click="ChangeProfilePicDialog = false">Done</v-btn>
                 </v-card-actions>
               </v-card>
             </v-dialog>
@@ -201,16 +212,15 @@ export default {
       this.mylocaluser = JSON.parse(JSON.stringify(this.$store.state.user));
     },
     test() {
-      console.log(this.getAlluserPhotos[1])
+      console.log(this.getAlluserPhotos[1]);
     },
-    changeUserProfile () {
-      this.$store.dispatch  
+    changeUserProfile() {
+      this.$store.dispatch;
     }
   },
   computed: {
     ...mapState(["isLoading", "user"]),
     ...mapGetters(["UserMainPhoto", "getAlluserPhotos"])
   }
-  
 };
 </script>
