@@ -115,14 +115,15 @@
                 <v-card-text>
                   Select a photo or upload a new one:
                   <v-row>
-                    <v-col v-for="photo in getAlluserPhotos" :key="photo.id" class="d-flex child-flex" cols="4">
+                    <v-col v-for="(photo, index) in getAlluserPhotos" :key="photo.id" class="d-flex child-flex" cols="4">
                       <v-card flat tile class="d-flex">
                         <v-img
+                          @click = "setMainProfilePic(index)"
                           :src="photo.url"
-                          :lazy-src="`https://picsum.photos/10/6?image=${n * 5 + 10}`"
+                          lazy-src = "https://picsum.photos/10/6"
                           aspect-ratio="1"
                           class="grey lighten-2"
-                        >
+                        ><p v-if = "photo.main">In use</p>
                           <template v-slot:placeholder>
                             <v-row class="fill-height ma-0" align="center" justify="center">
                               <v-progress-circular indeterminate color="grey lighten-5"></v-progress-circular>
@@ -135,12 +136,11 @@
                 </v-card-text>
                 <v-card-actions>
                   <v-spacer></v-spacer>
-                  <v-btn color="green darken-1" text @click="ChangeProfilePicDialog = false">Cancel</v-btn>
                   <v-btn
                     color="green darken-1"
                     text
                     @click="ChangeProfilePicDialog = false"
-                  >Update pic</v-btn>
+                  >Done</v-btn>
                 </v-card-actions>
               </v-card>
             </v-dialog>
@@ -157,7 +157,7 @@
   </v-container>
 </template>
 <script>
-import { mapState, mapGetters } from "vuex";
+import { mapState, mapGetters, mapActions } from "vuex";
 export default {
   name: "EditProfile",
   data() {
@@ -191,6 +191,7 @@ export default {
     // }
   },
   methods: {
+    ...mapActions(["setMainProfilePic"]),
     async handleUpdateProfile() {
       await this.$store.dispatch("updateUser", this.mylocaluser).then(() => {
         this.showSnackbar = true;
@@ -200,8 +201,10 @@ export default {
       this.mylocaluser = JSON.parse(JSON.stringify(this.$store.state.user));
     },
     test() {
-      console.log(this.getAlluserPhotos)
-      
+      console.log(this.getAlluserPhotos[1])
+    },
+    changeUserProfile () {
+      this.$store.dispatch  
     }
   },
   computed: {

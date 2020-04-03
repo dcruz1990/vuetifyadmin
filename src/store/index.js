@@ -32,6 +32,10 @@ export default new Vuex.Store({
     setError (state, value) {
       state.error.errorType = value.type
       state.error.errorFlag = value.flag
+    },
+    setUserProfile (state, index) {
+      this.getters.UserMainPhoto[0].main = false
+      state.user.photos[index].main = true
     }
   },
   actions: {
@@ -76,6 +80,9 @@ export default new Vuex.Store({
       } catch (err) {
         return err
       }
+    },
+    setMainProfilePic(context, index) {
+      context.commit('setUserProfile', index)
     }
   },
   modules: {
@@ -90,8 +97,6 @@ export default new Vuex.Store({
     getAlluserPhotos (state) {
       return state.user.photos
     }
-    
-  
   }
   
 })
