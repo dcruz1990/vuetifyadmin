@@ -3,6 +3,8 @@ import Vuex from 'vuex'
 
 // import axios from 'axios'
 
+import { login, getUserData } from '@/services/AuthService'
+
 // import userdata from '@/assets/dumydata/data'
 // import datauser from '@/assets/dumydata/data.json'
 
@@ -44,7 +46,7 @@ export default new Vuex.Store({
     }
   },
   actions: {
-    Login (context, userdata) {
+     Login (context, userdata) {
       context.commit('setLoadingStatus', true)
       // const baseUrl = 
       const header = { 'Content-Type': 'application/json' }
@@ -62,7 +64,9 @@ export default new Vuex.Store({
           context.commit('setError', Unauthorized)
           // context.commit('setBadCredentials', true)
         }
+        console.log(response)
         return response.json()
+        
       }).then((data) => {
         context.commit('setUserStatus', data.user)
         context.commit('setToken', data.token)
@@ -85,7 +89,7 @@ export default new Vuex.Store({
     updateUser(context, value) {
       let header = { 
         'Content-Type': 'application/json',
-        'Authorization': 'Bearer ' + this.state.token
+        'Authorization': 'Bearer ' + localStorage.getItem('token')
       }
       try {
         fetch(this.state.baseUrl + 'users/' + this.state.user.id, {
@@ -103,9 +107,6 @@ export default new Vuex.Store({
         console.log(error)
       }
     },
-    async getUser (context) {
-      await axios.create()
-    }
     // setMainProfilePic(context, index) {
     //   context.commit('setUserProfile', index)
     // }

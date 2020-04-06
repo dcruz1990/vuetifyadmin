@@ -26,7 +26,7 @@
                   <v-col cols="12" md="4">
                     <v-text-field
                       @keydown="isTyping = true"
-                      v-debounce:400ms="handleUpdateProfile"
+                      v-debounce:300ms="handleUpdateProfile"
                       v-model="mylocaluser.username"
                       class="purple-input"
                       label="User Name"
@@ -183,7 +183,9 @@
   </v-container>
 </template>
 <script>
-import { mapState, mapGetters, mapActions } from "vuex";
+import { mapState, mapGetters, mapActions, mapMutations } from "vuex";
+import { isAuthenticated, getUserData } from '@/services/AuthService'
+import router from '@/router/index'
 export default {
   name: "EditProfile",
   data() {
@@ -195,8 +197,23 @@ export default {
       ChangeProfilePicDialog: false
     };
   },
+  mounted () {
+    console.log("esto ocurre cuando se monta")
+  },
   beforeMount() {
-    this.mylocaluser = JSON.parse(JSON.stringify(this.$store.state.user));
+    if (!isAuthenticated) {
+      console.log('no esta authenticado')
+    } else {
+     getUserData('1').then(response => {
+       console.log(response.data)
+       let userdata = response.data
+       this.setUserStatus(userdata)
+       this.mylocaluser = JSON.parse(JSON.stringify(this.$store.state.user)); 
+     })
+
+    } 
+    
+    // this.mylocaluser = JSON.parse(JSON.stringify(this.$store.state.user));
   },
   beforeRouteLeave(to, from, next) {
     // this.$store.dispatch("updateUser", this.mylocaluser)
@@ -217,6 +234,7 @@ export default {
   },
   methods: {
     // ...mapActions(["setMainProfilePic"]),
+    ...mapMutations(["setUserStatus"]),
     async handleUpdateProfile() {
       await this.$store.dispatch("updateUser", this.mylocaluser).then(() => {
         this.showSnackbar = true;

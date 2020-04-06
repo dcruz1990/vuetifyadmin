@@ -6,7 +6,7 @@ import LoginView from '../views/LoginView'
 import EditProfile from '@/components/EditProfile'
 import NotFound from '@/views/NotFound'
 
-
+import store from '@/store/index'
 
 Vue.use(VueRouter)
 
@@ -26,16 +26,17 @@ const routes = [
     path: '/editprofile',
     name: 'EditProfile',
     component: EditProfile,
-    // beforeEnter(to, from, next) {
-    //   if (store.state.isAuthenticated) { 
-    //     next()
-    //   } else {
-    //     next({
-    //       name: 'Login',
-    //       query: { redirectFrom: to.fullPath  }
-    //     })
-    //   } 
-    // }
+    beforeEnter(to, from, next) {
+      let isAuthenticated = localStorage.getItem('token')
+      if (isAuthenticated) { 
+        next()
+      } else {
+        next({
+          name: 'Login',
+          query: { redirectFrom: to.fullPath  }
+        })
+      } 
+    }
     
   },
   {
