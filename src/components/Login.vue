@@ -48,6 +48,8 @@
 
 <script>
 import { mapState, mapMutations } from "vuex";
+import { isAuthenticated } from "@/services/AuthService"
+import router from '@/router/index'
 
 export default {
   name: "Login",
@@ -67,9 +69,20 @@ export default {
       v => /.+@.+/.test(v) || "E-mail must be valid"
     ]
   }),
+  beforeMount() {
+    if (isAuthenticated()) {
+      
+      router.push('/home')
+    } else {
+      console.log("identificate por favor")
+    }     
+    // this.mylocaluser = JSON.parse(JSON.stringify(this.$store.state.user));
+  },
   computed: {
     ...mapState(["isLoading", "error"]),
-    ...mapMutations(["setError"])
+    ...mapMutations(["setError", "setIsAuthenticate"]),
+
+    
   },
   methods: {
     login() {

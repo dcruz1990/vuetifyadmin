@@ -48,7 +48,7 @@
 
         <v-toolbar-title ><span @click.prevent = "goHome">Coding In DFW Dashboard</span></v-toolbar-title>
         <v-spacer />
-        <span v-if="isAuthenticated">{{ user.fullname }}</span>
+        <span v-if="isAuthenticated">{{ user.fullName }}</span>
         
         <v-menu bottom left v-if="isAuthenticated" open-on-hover>
           <template v-slot:activator="{ on }">
@@ -75,7 +75,7 @@
                 <span>Add product</span>
               </v-list-item-title>
             </v-list-item>
-            <v-list-item key="logout" >
+            <v-list-item key="logout" @click.prevent = "exit" >
               <v-list-item-title >
                 <v-icon left medium color="blue darken-2">mdi-exit-to-app</v-icon><span>Logout</span></v-list-item-title>
             </v-list-item>
@@ -106,10 +106,11 @@
 <script>
 import { mapState, mapGetters } from "vuex";
 import router from '@/router/index'
+import { logout } from '@/services/AuthService'
 
 export default {
   data: () => ({
-    drawer: null,
+    drawer: false,
     showSnackbar: false
    
   }),
@@ -123,11 +124,15 @@ export default {
       router.push('/').catch(err => {
         this.showSnackbar = true  
       }) 
+    },
+    exit () {
+      logout()
     }
   },
   computed: {
     ...mapState(["isAuthenticated", "user"]),
-    ...mapGetters(["UserMainPhoto"])
+    ...mapGetters(["UserMainPhoto"]),
+  
   }
 };
 </script>

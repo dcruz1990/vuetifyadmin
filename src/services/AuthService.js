@@ -1,5 +1,6 @@
 import axios from 'axios'
 
+
 const api = axios.create({
     baseURL: 'http://192.168.1.1:5050/api/',
     timeout: 1000,
@@ -22,7 +23,11 @@ function getUserData(userid) {
     return api.get('users/'+ userid)
 }
 
-export { login, isAuthenticated, getUserData }
+function logout() {
+    localStorage.removeItem('token')
+}
+
+export { login, isAuthenticated, getUserData, logout }
 
 
 
