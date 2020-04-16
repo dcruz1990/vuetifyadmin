@@ -71,7 +71,7 @@
                       label="Adress"
                       class="purple-input"
                     />
-                  </v-col> -->
+                  </v-col>-->
 
                   <!-- <v-col cols="12" md="4">
                     <v-text-field
@@ -81,7 +81,7 @@
                       label="City"
                       class="purple-input"
                     />
-                  </v-col> -->
+                  </v-col>-->
 
                   <!-- <v-col cols="12" md="4">
                     <v-text-field
@@ -91,7 +91,7 @@
                       class="purple-input"
                       label="Country"
                     />
-                  </v-col> -->
+                  </v-col>-->
 
                   <!-- <v-col cols="12">
                     <v-textarea
@@ -101,7 +101,7 @@
                       label="About Me"
                       v-model="mylocaluser.aboutme"
                     />
-                  </v-col> -->
+                  </v-col>-->
                 </v-row>
               </v-container>
             </v-form>
@@ -112,7 +112,7 @@
       <v-col cols="12" md="4">
         <v-card-text class="text-center">
           <v-avatar color="orange" size="150">
-            <v-img lazy-src="@/assets/logo.png"  aspect-ratio="1.7"></v-img>
+            <v-img lazy-src="@/assets/logo.png" aspect-ratio="1.7"></v-img>
             <!-- :src="UserMainPhoto[0].url" -->
           </v-avatar>
           <v-col>
@@ -125,20 +125,13 @@
                 <v-card-text>
                   Select a photo or upload a new one:
                   <v-row>
-                     <!-- v-for="(photo, index) in getAlluserPhotos" -->
-                     <!-- :key="photo.id" -->
-                    <v-col
-                     
-                      
-                      class="d-flex child-flex"
-                      cols="4"
-                    >
+                    <!-- v-for="(photo, index) in getAlluserPhotos" -->
+                    <!-- :key="photo.id" -->
+                    <v-col class="d-flex child-flex" cols="4">
                       <v-card flat tile class="d-flex">
                         <!-- :src="photo.url" -->
                         <!-- @click="setMainProfilePic(index)" -->
                         <v-img
-                          
-                          
                           lazy-src="https://picsum.photos/10/6"
                           aspect-ratio="1"
                           class="grey lighten-2"
@@ -184,8 +177,8 @@
 </template>
 <script>
 import { mapState, mapGetters, mapActions, mapMutations } from "vuex";
-import { isAuthenticated, getUserData } from '@/services/AuthService'
-import router from '@/router/index'
+import { userService } from "../_services";
+import router from "@/router/index";
 export default {
   name: "EditProfile",
   data() {
@@ -197,22 +190,18 @@ export default {
       ChangeProfilePicDialog: false
     };
   },
-  mounted () {
-    console.log("esto ocurre cuando se monta")
+  mounted() {
+    // console.log("esto ocurre cuando se monta");
+    // this.mylocaluser = JSON.parse(localStorage.getItem("user"));
   },
   beforeMount() {
-    if (!isAuthenticated) {
-      console.log('no esta authenticado')
+    if (!userService.checkAuth()) {
+      router.push("/");
     } else {
-     getUserData('1').then(response => {
-       console.log(response.data)
-       let userdata = response.data
-       this.setUserStatus(userdata)
-       this.mylocaluser = JSON.parse(JSON.stringify(this.$store.state.user)); 
-     })
+      // this.mylocaluser = JSON.parse(JSON.stringify(this.$store.state.user));
+      this.mylocaluser = JSON.parse(localStorage.getItem("user"));
+    }
 
-    } 
-    
     // this.mylocaluser = JSON.parse(JSON.stringify(this.$store.state.user));
   },
   beforeRouteLeave(to, from, next) {
@@ -235,23 +224,24 @@ export default {
   methods: {
     // ...mapActions(["setMainProfilePic"]),
     ...mapMutations(["setUserStatus"]),
-    async handleUpdateProfile() {
-      await this.$store.dispatch("updateUser", this.mylocaluser).then(() => {
+    handleUpdateProfile() {
+      this.$store.dispatch("updateUser", this.mylocaluser).then(ok => {
         this.showSnackbar = true;
         this.isTyping = false;
       });
 
-      this.mylocaluser = JSON.parse(JSON.stringify(this.$store.state.user));
+      // this.mylocaluser = JSON.parse(localStorage.getItem("user")).user;
+      // this.mylocaluser = JSON.parse(JSON.stringify(this.$store.state.user));
     },
     test() {
       // console.log(this.getAlluserPhotos[1]);
-    },
+    }
     // changeUserProfile() {
     //   this.$store.dispatch;
     // }
   },
   computed: {
-    ...mapState(["isLoading", "user"]),
+    ...mapState(["isLoading", "user"])
     // ...mapGetters(["UserMainPhoto", "getAlluserPhotos"])
   }
 };

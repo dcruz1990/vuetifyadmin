@@ -1,111 +1,107 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
+import router from '@/router/index'
+import { userService } from '../_services';
 
 // import axios from 'axios'
 
-import { login, getUserData } from '@/services/AuthService'
+// import { login, getUserData } from '@/services/AuthService'
 
 // import userdata from '@/assets/dumydata/data'
 // import datauser from '@/assets/dumydata/data.json'
 
 Vue.use(Vuex)
 
+const user = JSON.parse(localStorage.getItem('user'));
+
 export default new Vuex.Store({
   strict: true,
   state: {
     isLoading: false,
-    user: {},
+    user: user,
     token: null,
-    isAuthenticated: false,
+    isAuthenticated: userService.checkAuth(),
     error: {
       errorType: '',
       errorFlag: false
     },
-    baseUrl: 'http://192.168.1.1:5050/api/'
+
   },
   mutations: {
-    setToken (state, val) {
+    setToken(state, val) {
       state.token = val
     },
-    setLoadingStatus (state, val) {
+    setLoadingStatus(state, val) {
       state.isLoading = val
     },
-    setUserStatus (state, user) {
+    setUser(state, user) {
       state.user = user
     },
-    setIsAuthenticate (state, value) {
+    setIsAuthenticate(state, value) {
       state.isAuthenticated = value
     },
-    setError (state, value) {
+    setError(state, value) {
       state.error.errorType = value.type
       state.error.errorFlag = value.flag
     },
-    setUserProfile (state, index) {
+    setUserProfile(state, index) {
       this.getters.UserMainPhoto[0].main = false
       state.user.user.photos[index].main = true
     }
   },
   actions: {
-     Login (context, userdata) {
-      context.commit('setLoadingStatus', true)
-      // const baseUrl = 
-      const header = { 'Content-Type': 'application/json' }
-      fetch(this.state.baseUrl + 'Auth/login', { method: 'post', headers: header, body: JSON.stringify(userdata) }).then((response) => {
-        if (response.status === 200) {
+    Login(context, userdata) {
+      userService.login(userdata.username, userdata.password).then(
+        context.commit('setLoadingStatus', true)
+      ).then(
+        user => {
+          context.commit('setUser', user.user);
+          context.commit('setToken', user.token)
           context.commit('setIsAuthenticate', true)
           context.commit('setLoadingStatus', false)
-        } else if (response.status === 401) {
-          context.commit('setLoadingStatus', false)
-          context.commit('setIsAuthenticate', false)
-          const Unauthorized = {
-            type: 'Wrong username or password, please verify!',
-            flag: true
+          router.push('/home');
+        },
+        data => {
+          console.log(data)
+          let myerr = {
+            flag: true,
+            type: data
           }
-          context.commit('setError', Unauthorized)
-          // context.commit('setBadCredentials', true)
+          context.commit('setError', myerr)
+          context.commit('setLoadingStatus', false)
         }
-        console.log(response)
-        return response.json()
-        
-      }).then((data) => {
-        context.commit('setUserStatus', data.user)
-        context.commit('setToken', data.token)
-        localStorage.setItem('token', data.token)
-        context.commit('setLoadingStatus', false)
-        console.log(this.data)
-      }).catch((err) => {
-        const error = {
-          type: err,
-          flag: true
-        }
-        context.commit('setError', error)
-        context.commit('setLoadingStatus', false)
-        console.log(err)
-      })
+      );
     },
     setErr(context, value) {
       context.commit('setError', value)
     },
     updateUser(context, value) {
-      let header = { 
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer ' + localStorage.getItem('token')
-      }
-      try {
-        fetch(this.state.baseUrl + 'users/' + this.state.user.id, {
-         method: 'put',
-         headers: header,
-         body: JSON.stringify(value)
-        }).then((response) => {
-          if (response.status == 204) {
-            context.commit('setUserStatus', value)
-          } else {
-            console.log(response.statusText)
-          }
-        })
-      } catch (error) {
-        console.log(error)
-      }
+      userService.updateUser(value).then(
+        context.commit('setLoadingStatus', true)
+      ).then(data => {
+        context.commit('setUser', value)
+        localStorage.setItem('user', JSON.stringify(value))
+      })
+
+      // let header = {
+      //   'Content-Type': 'application/json',
+      //   'Authorization': 'Bearer ' + localStorage.getItem('token')
+      // }
+      // try {
+      //   fetch(this.state.baseUrl + 'users/' + this.state.user.id, {
+      //     method: 'put',
+      //     headers: header,
+      //     body: JSON.stringify(value)
+      //   }).then((response) => {
+      //     if (response.status == 204) {
+      //       context.commit('setUserStatus', value)
+      //     } else {
+      //       console.log(response.statusText)
+      //     }
+      //   })
+      // } catch (error) {
+      //   console.log(error)
+      // }
     },
     // setMainProfilePic(context, index) {
     //   context.commit('setUserProfile', index)
@@ -114,7 +110,7 @@ export default new Vuex.Store({
   modules: {
   },
   getters: {
-    getIsAuthenticated (state) {
+    getIsAuthenticated(state) {
       return state.isAuthenticated
     },
     // UserMainPhoto (state) {
@@ -132,5 +128,5 @@ export default new Vuex.Store({
     //   }
     // }
   }
-  
+
 })

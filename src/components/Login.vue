@@ -2,25 +2,23 @@
   <v-card color="grey lighten-4" elevation="6" shaped>
     <v-card-title class="title">Login</v-card-title>
     <v-card-subtitle class="subtitle">
-
-        <v-col >Please, log in with your email and password</v-col>
-
+      <v-col>Please, log in with your username and password</v-col>
     </v-card-subtitle>
     <v-card-text>
       <v-form v-model="valid">
         <v-container>
-          <v-row v-if="error.errorFlag" >
-            <v-col >
-              <v-alert @input = "alertClosed" type="error" dismissible>{{ error.errorType }}</v-alert>
+          <v-row v-if="error.errorFlag">
+            <v-col>
+              <v-alert @input="alertClosed" type="error" dismissible>{{ error.errorType }}</v-alert>
             </v-col>
           </v-row>
           <v-row align="center">
-            <v-col offset="2" lg="8" md="6" >
-              <v-text-field v-model="auth.email" :rules="emailRules" label="E-mail" required></v-text-field>
+            <v-col offset="2" lg="8" md="6">
+              <v-text-field v-model="auth.username" :rules="userRules" label="Username" required></v-text-field>
             </v-col>
           </v-row>
           <v-row>
-            <v-col  offset="2" lg="8" md="6" >
+            <v-col offset="2" lg="8" md="6">
               <v-text-field
                 v-model="auth.password"
                 :rules="passwordRules"
@@ -31,7 +29,7 @@
             </v-col>
           </v-row>
           <v-row>
-            <v-col offset="2" lg="8" md="6" >
+            <v-col offset="2" lg="8" md="6">
               <v-btn
                 @click.prevent="login"
                 :loading="isLoading"
@@ -48,8 +46,8 @@
 
 <script>
 import { mapState, mapMutations } from "vuex";
-import { isAuthenticated } from "@/services/AuthService"
-import router from '@/router/index'
+import { userService } from "../_services";
+import router from "@/router/index";
 
 export default {
   name: "Login",
@@ -57,49 +55,40 @@ export default {
     redirectErr: String
   },
   data: () => ({
-    auth: { email: "", password: "" },
+    auth: { username: "", password: "" },
     valid: false,
     err: {
-        flag: false,
-        type: ""
+      flag: false,
+      type: ""
     },
     passwordRules: [v => !!v || "Password is required"],
-    emailRules: [
-      v => !!v || "E-mail is required",
-      v => /.+@.+/.test(v) || "E-mail must be valid"
+    userRules: [
+      v => !!v || "Username is required"
+      // v => /.+@.+/.test(v) || "E-mail must be valid"
     ]
   }),
   beforeMount() {
-    if (isAuthenticated()) {
-      
-      router.push('/home')
+    if (this.checkForAuth()) {
+      router.push("/home");
     } else {
-      console.log("identificate por favor")
-    }     
+      console.log("identificate por favor");
+    }
     // this.mylocaluser = JSON.parse(JSON.stringify(this.$store.state.user));
   },
   computed: {
-    ...mapState(["isLoading", "error"]),
-    ...mapMutations(["setError", "setIsAuthenticate"]),
-
-    
+    ...mapState(["isLoading", "error", "isAuthenticated"]),
+    ...mapMutations(["setError", "setIsAuthenticate"])
   },
   methods: {
     login() {
-      if (this.valid) {
-        this.$store.dispatch("Login", this.auth);
-        if (this.error.errorFlag) {
-          this.auth.password = "";
-          this.auth.email = "";
-        }
-      } else {
-        this.myerror = true;
-      }
+      this.$store.dispatch("Login", this.auth);
     },
     alertClosed() {
-        this.$store.dispatch("setErr", this.err)
+      this.$store.dispatch("setErr", this.err);
+    },
+    checkForAuth() {
+      return userService.checkAuth();
     }
-  },
-    
+  }
 };
 </script>

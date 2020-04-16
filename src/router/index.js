@@ -21,23 +21,36 @@ const routes = [
     path: '/home',
     name: 'Home',
     component: Home,
+    // beforeEnter(to, from, next) {
+    //   let isAuthenticated = localStorage.getItem('token')
+    //   if (isAuthenticated) { 
+    //     next()
+    //   } else {
+    //     next({
+    //       name: 'Login',
+    //       query: { redirectFrom: to.fullPath  }
+    //     })
+    //   } 
+    // }
   },
   {
     path: '/editprofile',
     name: 'EditProfile',
     component: EditProfile,
-    beforeEnter(to, from, next) {
-      let isAuthenticated = localStorage.getItem('token')
-      if (isAuthenticated) { 
-        next()
-      } else {
-        next({
-          name: 'Login',
-          query: { redirectFrom: to.fullPath  }
-        })
-      } 
-    }
-    
+    // beforeEnter(to, from, next) {
+    //   let test = store.isAuthenticated
+    //   console.log(test)
+    //   let isAuthenticated = localStorage.getItem('user')
+    //   if (isAuthenticated) {
+    //     next()
+    //   } else {
+    //     next({
+    //       name: 'Login',
+    //       query: { redirectFrom: to.fullPath }
+    //     })
+    //   }
+    // }
+
   },
   {
     // matches everything else  
@@ -51,6 +64,19 @@ const router = new VueRouter({
   mode: 'history',
   base: process.env.BASE_URL,
   routes
+})
+
+router.beforeEach((to, from, next) => {
+  // redirect to login page if not logged in and trying to access a restricted page
+  const publicPages = ['/'];
+  const authRequired = !publicPages.includes(to.path);
+  const loggedIn = localStorage.getItem('user');
+
+  if (authRequired && !loggedIn) {
+    return next('/');
+  }
+
+  next();
 })
 
 export default router
